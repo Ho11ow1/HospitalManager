@@ -2,7 +2,7 @@ using System;
 
 class C_HospitalManager
 {
-    public void fn_Run()
+    public void Fn_Run()
     {
         try
         {

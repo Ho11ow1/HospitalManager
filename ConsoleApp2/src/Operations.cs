@@ -2,7 +2,7 @@ using System;
 
 class C_Operations
 {
-    public void fn_Operation()
+    public void Fn_Operation()
     {
         try
         {
