@@ -62,8 +62,9 @@ class HospitalManager
                     Console.WriteLine("=== Hospital Menu ===");
                     Console.WriteLine("1. Show User Details");
                     Console.WriteLine("2. Set Operation");
-                    Console.WriteLine("3. Logout");
-                    Console.WriteLine("4. Exit Program");
+                    Console.WriteLine("3. Show Operation Details");
+                    Console.WriteLine("4. Logout");
+                    Console.WriteLine("5. Exit Program");
                     Console.WriteLine("==================");
 
                     Console.Write("Choose option: ");
@@ -82,10 +83,14 @@ class HospitalManager
                         break;
 
                         case 3:
-                            _loggedIn = false;
+                            _operation.Fn_ShowOperationDetails();
                         break;
 
                         case 4:
+                            _loggedIn = false;
+                        break;
+
+                        case 5:
                             Console.WriteLine("Thank you for using our app...");
                             _running = false;
                         break;
