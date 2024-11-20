@@ -1,9 +1,9 @@
 using System;
 using System.IO;
 
-class C_DB
+class DataBase
 {
-    private C_User userdata = new C_User();
+    #region Public Methods
     public bool Fn_DB_Exist()
     {
         if (!File.Exists(Constants.DB_NAME))
@@ -26,20 +26,16 @@ class C_DB
         return true;
     }
 
-    public void Fn_Save_To_DB()
+    // Saves user data to database file
+    // Parameters:
+    //   userData: User object containing the data to save
+    public void Fn_Save_To_DB(User userData)
     {
         try
         {
             using (StreamWriter sw = new StreamWriter(Constants.DB_NAME, true))
             {
-                DateTime time = DateTime.Now;
-
-                sw.WriteLine("=====================\n");
-                sw.WriteLine($"Account Created: {time}\n");
-                sw.WriteLine($"Account ID: {userdata.Fn_GetID()}\n");
-
-
-                sw.WriteLine("=====================\n\n");
+                WriteUserData(sw, userData);
             }
         }
         catch (Exception e)
@@ -47,4 +43,19 @@ class C_DB
             Console.WriteLine($"Error occurred while saving to DB: {e.Message}");
         }
     }
+    #endregion
+
+    #region Private Methods
+    private void WriteUserData(StreamWriter sw, User userData)
+    {
+        DateTime time = DateTime.Now;
+        sw.WriteLine("=====================");
+        sw.WriteLine($"Account Created: {time}");
+        sw.WriteLine($"Account ID: {userData.UserId}");
+        sw.WriteLine($"User Name: {userData.UserName}");
+        sw.WriteLine($"User Surname: {userData.UserSurname}");
+        sw.WriteLine($"User Password: {userData.UserPassword}");
+        sw.WriteLine("=====================\n");
+    }
+    #endregion
 }
