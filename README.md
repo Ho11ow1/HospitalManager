@@ -75,14 +75,3 @@ If you encounter errors:
 - Check if all source files exist: `dir src\*.cs`
 - Ensure database file (`2B.txt`) has proper read/write permissions
 
-```bash
-#DATABSE STRUCTURE
-The database file (`2B.txt`) uses this format:
-=====================
-Account Created: [DateTime]
-Account ID: [UInt64]
-User Name: [string]
-User Surname: [string]
-User Password: [string]
-=====================
-```
