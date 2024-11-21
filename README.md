@@ -16,6 +16,7 @@ A simple and effective HospitalManager made in ```C#```
   - Define operation types (Medicine, Surgery, Checkup)
   - Manage operation dates and scheduling
   - Update operation status based on time of day
+  - Fixed cost structure for each treatment type (ranging from 100 to 300)
 
 - Data Persistence
   - Automatic database creation and management
