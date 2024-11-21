@@ -1,9 +1,11 @@
-public enum OperationStatus
+public enum OperationName
 {
     NULL = 0,
-    Pending,
-    InProgress,
-    Completed
+    AnxietyTreatment,
+    SchizophreniaTreatment,
+    DepressionTreatment,
+    BipolarDisorderTreatment,
+    PanicAttackTreatment
 }
 
 public enum OperationType
@@ -14,12 +16,20 @@ public enum OperationType
     Checkup
 }
 
-/*
-Operations example:
-=====================
-Operation Name: [`REDACTED`]
-Operation Type: [`REDACTED`]
-Operation Status: [`REDACTED`]
-Operation Date: [`REDACTED`]
-=====================
-*/
+public enum OperationStatus
+{
+    NULL = 0,
+    Pending,
+    InProgress,
+    Completed
+}
+
+public enum OperationCost
+{
+    NULL = 0,
+    AnxietyTreatment = 150,
+    SchizophreniaTreatment = 300,
+    DepressionTreatment = 100,
+    BipolarDisorderTreatment = 250,
+    PanicAttackTreatment = 200
+}

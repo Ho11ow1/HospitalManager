@@ -6,12 +6,11 @@ class HospitalManager
     private bool _loggedIn = false;
     private bool _running = true;
     private UInt16 _choice = 0;
-    private readonly User _user = new User();
-    private readonly Operations _operation = new Operations();
+
     #endregion
 
     #region Public Methods
-    public void Fn_Run()
+    public void Run()
     {
         try
         {
@@ -33,12 +32,12 @@ class HospitalManager
                     {
                         case 1:
                             Console.Clear();
-                            if (_user.Fn_LoginUser()) { _loggedIn = true; }
+                            // TODO: Login User
                         break;
 
                         case 2:
                             Console.Clear();
-                            _user.Fn_CreateUser(_operation);
+                            // TODO: Create User
                             _loggedIn = true;
                         break;
 
@@ -75,15 +74,15 @@ class HospitalManager
                     switch (_choice)
                     {
                         case 1:
-                            _user.Fn_ShowUserDetails(_operation);
+                            // TODO: Show User Details
                         break;
 
                         case 2:
-                            _operation.Fn_Operation();
+                            // TODO: Set Operation Details
                         break;
 
                         case 3:
-                            _operation.Fn_ShowOperationDetails();
+                            // TODO: Show Operation Details
                         break;
 
                         case 4:
