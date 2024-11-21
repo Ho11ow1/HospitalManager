@@ -39,9 +39,10 @@ Account ID: [UInt64]
 User Name: [string]
 User Surname: [string]
 User Password: [string]
-Operation Name: [string]
-Operation Type: [Medicine|Surgery|Checkup]
+Operation Name: [NULL|AnxietyTreatment|SchizophreniaTreatment|DepressionTreatment|BipolarDisorderTreatment|PanicAttackTreatment]
+Operation Type: [NULL|Medicine|Surgery|Checkup]
 Operation Status: [NULL|Pending|InProgress|Completed]
+Operation Cost: [0|150|300|100|250|200]
 Operation Date: [DateTime?]
 =====================
 ```
