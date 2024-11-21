@@ -38,7 +38,7 @@ class HospitalManager
 
                         case 2:
                             Console.Clear();
-                            _user.Fn_CreateUser();
+                            _user.Fn_CreateUser(_operation);
                             _loggedIn = true;
                         break;
 
@@ -75,11 +75,11 @@ class HospitalManager
                     switch (_choice)
                     {
                         case 1:
-                            _user.Fn_ShowUserDetails();
+                            _user.Fn_ShowUserDetails(_operation);
                         break;
 
                         case 2:
-                            _operation.Fn_SetOperation();
+                            _operation.Fn_Operation();
                         break;
 
                         case 3:

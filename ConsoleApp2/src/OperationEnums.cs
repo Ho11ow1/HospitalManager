@@ -1,12 +1,14 @@
 public enum OperationStatus
 {
-    Pending,    // Operation not started
-    InProgress, // Operation ongoing
-    Completed   // Operation finished
+    NULL = 0,
+    Pending,
+    InProgress,
+    Completed
 }
 
 public enum OperationType
 {
+    NULL = 0,
     Medicine,
     Surgery,
     Checkup

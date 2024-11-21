@@ -4,7 +4,6 @@ using System.Linq;
 class User
 {
     #region Fields and Properties
-    private readonly Operations _operation = new Operations();
     private readonly Random _random = new Random();
     private readonly DataBase _database = new DataBase();
 
@@ -22,19 +21,19 @@ class User
     #endregion
 
     #region Public Methods
-    public void Fn_CreateUser()
+    public void Fn_CreateUser(Operations _operation)
     {
         if (!_database.Fn_DB_Exist())
         {
             Console.WriteLine("Database does not exist, creating new database...");
         }
 
-        UserName = Fn_GetValidInput("Enter User Name", Constants.MIN_LENGTH, Constants.MAX_LENGTH);
-        UserSurname = Fn_GetValidInput("Enter User Surname", Constants.MIN_LENGTH, Constants.MAX_LENGTH);
-        UserPassword = Fn_GetValidInput("Enter User Password", Constants.MIN_LENGTH, Constants.MAX_LENGTH);
+        UserName = Validation.GetValidInput("Enter User Name");
+        UserSurname = Validation.GetValidInput("Enter User Surname");
+        UserPassword = Validation.GetValidInput("Enter User Password");
         UserId = Fn_GetID();
         
-        _database.Fn_Save_To_DB(this); // Same as _database.Fn_Save_To_DB(UserName, UserSurname, UserPassword, UserId);
+        _database.Fn_Save_To_DB(this, _operation);
     }
 
     public bool Fn_LoginUser()
@@ -68,13 +67,12 @@ class User
                     }
                     else if (line.Contains(SEPARATOR)) // line.find(SEPARATOR) != string::npos
                     {
-                        // Check if current user record matches input credentials
                         if (Fn_ValidateLogin((tempUserName, tempUserSurname, tempUserPassword), inputData))
                         {
                             // If match found, set user data and exit loop
                             Fn_SetUserData((tempUserName, tempUserSurname, tempUserPassword));
                             userFound = true;
-                            break;  // Found the user, no need to continue reading
+                            break;
                         }
                         // Reset temp for next user login
                         tempUserName = tempUserSurname = tempUserPassword = "";
@@ -92,79 +90,25 @@ class User
         return userFound;
     }
 
-    public void Fn_ShowUserDetails()
+    public void Fn_ShowUserDetails(Operations _operation)
     {
         Console.WriteLine("=== User Details ===");
         Console.WriteLine($"User Name: {UserName}");
         Console.WriteLine($"User Surname: {UserSurname}");
         Console.WriteLine($"User Password: {UserPassword}");
-        Console.WriteLine($"Operation: {_operation.Operation}");
+        Console.WriteLine($"Operation: {_operation.Operation_Name}");
         Console.WriteLine("===================\n");
     }
 
     public UInt64 Fn_GetID() => Fn_SetID();
     #endregion
 
-    #region Input and Validation Methods
-    private string Fn_GetValidInput(string prompt, UInt16 minLength, UInt16 maxLength)
-    {
-        string input;
-        do
-        {
-            Console.Write($"{prompt} ({minLength}-{maxLength} characters, letters only): ");
-            input = Console.ReadLine()?.Trim() ?? "";
-        }
-        while (!Fn_ValidateInput(input, minLength, maxLength));
-
-        return input;
-    }
-
-    private bool Fn_ValidateInput(string input, UInt16 minLength, UInt16 maxLength)
-    {
-        if (string.IsNullOrWhiteSpace(input))
-        {
-            Console.WriteLine("Input cannot be empty.");
-            return false;
-        }
-
-        if (!Fn_IsAlpha(input))
-        {
-            Console.WriteLine("Input must contain only letters.");
-            return false;
-        }
-
-        UInt16 length = (UInt16)input.Length;
-        if (length < minLength || length > maxLength)
-        {
-            Console.WriteLine($"Input must be between {minLength} and {maxLength} characters long.");
-            return false;
-        }
-
-        return true;
-    }
-
-    private bool Fn_IsAlpha(string str)
-    {
-        if (string.IsNullOrEmpty(str))
-        {
-            return false;
-        }
-
-        return str.All(char.IsLetter);
-    }
-    #endregion
-
     #region Helper Methods
     private (string name, string surname, string password) Fn_GetUserInput()
     {
-        Console.Write("Input User Name: ");
-        string inputUserName = Console.ReadLine()?.Trim() ?? "";
-
-        Console.Write("Input User Surname: ");
-        string inputUserSurname = Console.ReadLine()?.Trim() ?? "";
-
-        Console.Write("Input User Password: ");
-        string inputUserPassword = Console.ReadLine()?.Trim() ?? "";
+        string inputUserName = Validation.GetValidInput("Input User Name");
+        string inputUserSurname = Validation.GetValidInput("Input User Surname");
+        string inputUserPassword = Validation.GetValidInput("Input User Password");
 
         return (inputUserName, inputUserSurname, inputUserPassword);
     }
