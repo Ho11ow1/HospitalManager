@@ -1,7 +1,6 @@
 using System;
-using ConsoleApp2.src.util;
 
-class Operations
+class Operation
 {
     #region Properties
     
@@ -19,6 +18,12 @@ class Operations
                - save operation to database
         */
         Console.WriteLine("Set Operation Successful");
+    }
+
+    public void ShowDetails()
+    {
+        // TODO: Implement show details logic
+        Console.WriteLine("Show Operation Details Successful");
     }
     #endregion
 

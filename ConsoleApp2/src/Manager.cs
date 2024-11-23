@@ -7,6 +7,9 @@ class HospitalManager
     private bool _running = true;
     private UInt16 _choice = 0;
 
+    private User _user = new User();
+    private Operation _operation = new Operation();
+    private DataBase _DB = new DataBase();
     #endregion
 
     #region Public Methods
@@ -32,12 +35,12 @@ class HospitalManager
                     {
                         case 1:
                             Console.Clear();
-                            // TODO: Login User
+                            if(_user.Login()) {_loggedIn = true;}
                         break;
 
                         case 2:
                             Console.Clear();
-                            // TODO: Create User
+                            _user.Register();
                             _loggedIn = true;
                         break;
 
@@ -49,8 +52,7 @@ class HospitalManager
                         default:
                             Console.Clear();
                             Console.WriteLine("Invalid input");
-                            continue;
-                        break;
+                        continue;
                     }
                     continue;
                 }
@@ -74,15 +76,15 @@ class HospitalManager
                     switch (_choice)
                     {
                         case 1:
-                            // TODO: Show User Details
+                            _user.ShowDetails();
                         break;
 
                         case 2:
-                            // TODO: Set Operation Details
+                            _operation.SetOperation();
                         break;
 
                         case 3:
-                            // TODO: Show Operation Details
+                            _operation.ShowDetails();
                         break;
 
                         case 4:
@@ -96,8 +98,7 @@ class HospitalManager
 
                         default:
                             Console.WriteLine("Invalid Input");
-                            continue;
-                        break;
+                        continue;
                     }
                 }
             }
