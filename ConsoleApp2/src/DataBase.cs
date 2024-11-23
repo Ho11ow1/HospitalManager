@@ -3,42 +3,34 @@ using System.IO;
 
 class DataBase
 {
+#region Constants
+    private string SEPERATOR = "================================";
+#endregion
+
 #region Public Methods
     public bool DBExists()
     {
-        return File.Exists("2B.txt");
+        return File.Exists(Constants.DB_NAME);
     }
+    // Refactor this into a method that can be used for both user and operation saving
     public void SaveUser(User user)
-    {
-        // TODO: Implement save user logic
+    { // Pass the current user object to the function and save data to the DB
         try
         {
-            using (StreamWriter writer = new StreamWriter("2B.txt", true))
+            using (StreamWriter writer = new StreamWriter(Constants.DB_NAME, true))
             {
-                writer.WriteLine(user.ToString());
+                writer.WriteLine($"{SEPERATOR}");
+                writer.WriteLine($"Account created: {user.dateTime}");
+                writer.WriteLine($"User ID: {user.accountID}");
+                writer.WriteLine($"User name: {user.name}");
+                writer.WriteLine($"User Surname: {user.surname}");
+                writer.WriteLine($"User Password: {user.password}");
             }
         }
         catch (Exception e)
         {
             Console.WriteLine($"Error saving user: {e.Message}");
         }
-        /*
-            1. Format user data:
-            - Create database entry format
-            - Add separators (=====================)
-            - Format all fields according to spec
-            
-            2. Write to file:
-            - Check if file exists, create if not
-            - Append user data to 2B.txt
-            - Use proper file handling (using statement)
-            
-            3. Error handling:
-            - Handle FileNotFoundException
-            - Handle IOException
-            - Handle UnauthorizedAccessException
-            - Verify write success
-        */
         Console.WriteLine("Save User Successful");
     }
     public void SaveOperation(Operation operation)
@@ -69,9 +61,10 @@ class DataBase
         */
         Console.WriteLine("Save Operation Successful");
     }
+    // Refactor this into a method that can be used for both password and accountID uniqueness checks
     public bool IsPasswordUnique(string password)
     {
-        using (StreamReader reader = new StreamReader("2B.txt"))
+        using (StreamReader reader = new StreamReader(Constants.DB_NAME))
         {
             string line;
             while ((line = reader.ReadLine()) != null)
@@ -84,8 +77,23 @@ class DataBase
         }
         return true;
     }
+    public bool IsAccountIDUnique(UInt64 accountID)
+    {
+        using (StreamReader reader = new StreamReader(Constants.DB_NAME))
+        {
+            string line;
+            while ((line = reader.ReadLine()) != null)
+            {
+                if (line.Contains(accountID.ToString()))
+                {
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
 #endregion
-
+// Essentailly the same function as IsAccountIDUnique but used for a different purpose
 #region Private Methods
     private bool FindUserInDatabase(string accountID)
     {

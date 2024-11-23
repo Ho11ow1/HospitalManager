@@ -2,11 +2,11 @@ using System;
 
 class Operation
 {
-    #region Properties
+#region Properties
     
-    #endregion
+#endregion
 
-    #region Public Methods
+#region Public Methods
     public void SetOperation()
     {
         // TODO: Implement set operation logic
@@ -25,9 +25,9 @@ class Operation
         // TODO: Implement show details logic
         Console.WriteLine("Show Operation Details Successful");
     }
-    #endregion
+#endregion
 
-    #region Private Methods
+#region Private Methods
     
-    #endregion
+#endregion
 }

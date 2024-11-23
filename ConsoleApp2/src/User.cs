@@ -1,54 +1,47 @@
 ﻿class User
 {
 #region Fields and Properties
-    private string name;
-    private string surname;
-    private string password;
-    private UInt64 accountID;
+    public DateTime dateTime { get; private set; } = DateTime.Now;
+    public string name { get; private set; }
+    public string surname { get; private set; }
+    public string password { get; private set; }
+    public UInt64 accountID { get; private set; }
 
     private DataBase DB = new DataBase();
 #endregion
 
 #region Public Methods
-    public void Register()
+    public bool Register()
     {
         try
-        {
+        { // Set user details
             name = Validation.GetValidInput("Enter your name");
             surname = Validation.GetValidInput("Enter your surname");
             password = Validation.GetValidInput("Enter your password");
             if (!DB.IsPasswordUnique(password))
             {
-                throw new Exception("2 Users cannot have the same password");
+                throw new Exception("We're sorry but this password is already taken, please try a different one.");
             }
             accountID = GenerateAccountID();
+            if (!DB.IsAccountIDUnique(accountID))
+            {
+                throw new Exception("We're sorry but this Account ID is already taken, please try again.");
+            }
         }
         catch (Exception e)
         {
+            Console.Clear();
             Console.WriteLine($"Error registering user: {e.Message}");
-        }
-        // TODO: Implement register logic
-        /*
-            2. Check database:
-            - Generate unique Account_ID
-            - Verify user doesn't already exist
-            
-            3. Create new user:
-            - Create timestamp for Account Created
-            - Initialize Operation fields to NULL
-            - Format data according to database structure
-            
-            4. Save to database:
-            - Write new user data to file
-            - Handle any I/O exceptions
-            
-            5. Return success/failure:
-            - Throw specific exceptions for each failure case
-            - Confirm success to user
-        */
-        Console.WriteLine("Register Successful");
-    }
 
+            return false;
+        }
+
+        DB.SaveUser(this); // Essentailly Pass the current user object to the function
+        Console.WriteLine("Register Successful");
+
+        return true;
+    }
+    //
     public bool Login()
     {
         // TODO: Implement login logic
@@ -73,7 +66,7 @@
         Console.WriteLine("Login Successful");
         return true;
     }
-
+    //
     public void ShowDetails()
     {
         // TODO: Implement show details logic

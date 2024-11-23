@@ -2,7 +2,7 @@ using System;
 
 class HospitalManager
 {
-    #region Fields
+#region Fields
     private bool _loggedIn = false;
     private bool _running = true;
     private UInt16 _choice = 0;
@@ -10,11 +10,15 @@ class HospitalManager
     private User _user = new User();
     private Operation _operation = new Operation();
     private DataBase _DB = new DataBase();
-    #endregion
+#endregion
 
-    #region Public Methods
+#region Public Methods
     public void Run()
     {
+        if (!_DB.DBExists())
+        {
+            File.Create(Constants.DB_NAME).Close();
+        }
         try
         {
             while (_running)
@@ -35,13 +39,12 @@ class HospitalManager
                     {
                         case 1:
                             Console.Clear();
-                            if(_user.Login()) {_loggedIn = true;}
+                            if (_user.Login()) {_loggedIn = true;}
                         break;
 
                         case 2:
                             Console.Clear();
-                            _user.Register();
-                            _loggedIn = true;
+                            if (_user.Register()) {_loggedIn = true;}
                         break;
 
                         case 3:
@@ -108,5 +111,5 @@ class HospitalManager
             Console.WriteLine(e.ToString());
         }
     }
-    #endregion
+#endregion
 }
