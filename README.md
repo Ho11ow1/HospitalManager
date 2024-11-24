@@ -1,6 +1,6 @@
 # HospitalManager
 
-A simple and effective HospitalManager made in ```C#```
+A simple and effective Hospital Management System made in `C#` specializing in mental health treatments.
 
 ## Features
 
@@ -10,19 +10,26 @@ A simple and effective HospitalManager made in ```C#```
   - View detailed user information
   - Unique user IDs for each account
 
-- Operation Management
-  - Set medical operations with names
-  - Track operation status (NULL, Pending, InProgress, Completed)
-  - Define operation types (Medicine, Surgery, Checkup)
+- Mental Health Operation Management
+  - Five specialized treatments:
+    - Anxiety Treatment (€150)
+    - Schizophrenia Treatment (€300)
+    - Depression Treatment (€100)
+    - Bipolar Disorder Treatment (€250)
+    - Panic Attack Treatment (€200)
+  - Track operation status (Pending, InProgress, Completed)
+  - Three operation types:
+    - Medicine
+    - Surgery
+    - Checkup
   - Manage operation dates and scheduling
   - Update operation status based on time of day
-  - Fixed cost structure for each treatment type (ranging from 100 to 300)
 
 - Data Persistence
-  - Automatic database creation and management
+  - Automatic SQLite database creation and management
   - Structured file storage with error handling
   - Record updating and maintenance
-  - Data integrity checks
+  - Data integrity checks and constraints
 
 - Input Validation
   - Character length restrictions (3-24 characters)
@@ -36,19 +43,19 @@ The SQLite database (`2B.db`) contains two tables:
 
 ### Users Table
 - AccountID (INTEGER PRIMARY KEY)
-- Name (TEXT)
-- Surname (TEXT)
-- Password (TEXT)
-- CreationDate (TEXT)
+- Name (TEXT NOT NULL)
+- Surname (TEXT NOT NULL)
+- Password (TEXT NOT NULL)
+- CreationDate (TEXT NOT NULL, ISO 8601 format: YYYY-MM-DD HH:MM:SS)
 
 ### Operations Table
 - OperationID (INTEGER PRIMARY KEY AUTOINCREMENT)
 - AccountID (INTEGER, FOREIGN KEY)
-- OperationName (INTEGER)
-- OperationType (INTEGER)
-- OperationStatus (INTEGER)
-- OperationCost (REAL)
-- OperationDate (TEXT)
+- OperationName (INTEGER, maps to enum: 0-5)
+- OperationType (INTEGER, maps to enum: 0-3)
+- OperationStatus (INTEGER, maps to enum: 0-3)
+- OperationCost (REAL, non-negative values)
+- OperationDate (TEXT, ISO 8601 format: YYYY-MM-DD HH:MM:SS)
 
 # Installation Guide
 
@@ -87,3 +94,4 @@ If you encounter errors:
 - Verify .NET is installed: `dotnet --version`
 - Check if all source files exist: `dir src\*.cs`
 - Ensure database file (`2B.db`) has proper read/write permissions
+- Verify SQLite dependencies are properly installed
