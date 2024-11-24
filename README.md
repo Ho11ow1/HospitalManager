@@ -87,4 +87,3 @@ If you encounter errors:
 - Verify .NET is installed: `dotnet --version`
 - Check if all source files exist: `dir src\*.cs`
 - Ensure database file (`2B.db`) has proper read/write permissions
-
