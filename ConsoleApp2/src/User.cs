@@ -67,22 +67,33 @@
         return true;
     }
     //
-    public void ShowDetails()
+    public void ShowDetails(User user, Operation? operation)
     {
+        try
+        {// Refactor this into reading data from the DB                // 1. Format user information:
+            Console.WriteLine($"Account created: {user.dateTime}");    // - User Account Creation Date
+            Console.WriteLine($"User ID: {user.accountID}");           // - User Account ID
+            Console.WriteLine($"User name: {user.name}");              // - User Name
+            Console.WriteLine($"User Surname: {user.surname}");        // - User Surname
+            Console.WriteLine($"User Password: {user.password}");      // - User Password
+
+            if (operation != null)
+            {                                                                           // 2. Format operation details:
+                Console.WriteLine($"Operation Name: {operation.operationName}");        // - Operation Name
+                Console.WriteLine($"Operation Type: {operation.operationType}");        // - Operation Type
+                Console.WriteLine($"Operation Status: {operation.operationStatus}");    // - Operation Status
+                Console.WriteLine($"Operation Cost: {operation.operationCost}");        // - Operation Cost
+                Console.WriteLine($"Operation Date: {operation.operationDate}");        // - Operation Date
+            }
+            //Console.WriteLine("Show Details Successful"); // DEBUG LOG
+        }
+        catch (Exception e)
+        {
+            Console.Clear();
+            Console.WriteLine($"Error showing user details: {e.Message}");
+        }
         // TODO: Implement show details logic
         /*
-            1. Format user information:
-            - Account ID
-            - Name and Surname
-            - Account Creation Date
-            
-            2. Format operation details (if exists):
-            - Operation Name
-            - Operation Type
-            - Operation Status
-            - Operation Cost
-            - Operation Date
-            
             3. Display formatting:
             - Add separators for readability
             - Handle NULL values appropriately

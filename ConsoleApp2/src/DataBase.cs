@@ -1,10 +1,11 @@
 using System;
 using System.IO;
+using Microsoft.Data.Sqlite;
 
 class DataBase
 {
 #region Constants
-    private string SEPERATOR = "================================";
+    private const string ConnectionString = "Data Source=" + Constants.DB_NAME;
 #endregion
 
 #region Public Methods
@@ -12,26 +13,57 @@ class DataBase
     {
         return File.Exists(Constants.DB_NAME);
     }
-    // Refactor this into a method that can be used for both user and operation saving
+    public void CreateDB()
+    {
+        using (var connection = new SqliteConnection(ConnectionString))
+        {
+            connection.Open();
+
+            var command = connection.CreateCommand();
+            command.CommandText = @"
+                CREATE TABLE IF NOT EXISTS Users 
+                (
+                    AccountID INTEGER PRIMARY KEY,
+                    Name TEXT NOT NULL,
+                    Surname TEXT NOT NULL,
+                    Password TEXT NOT NULL,
+                    CreationDate TEXT NOT NULL
+                );
+
+                CREATE TABLE IF NOT EXISTS Operations 
+                (
+                    OperationID INTEGER PRIMARY KEY AUTOINCREMENT,
+                    AccountID INTEGER NOT NULL,
+                    OperationName INTEGER NOT NULL,
+                    OperationType INTEGER NOT NULL,
+                    OperationStatus INTEGER NOT NULL,
+                    OperationCost REAL NOT NULL,
+                    OperationDate TEXT NOT NULL,
+                    FOREIGN KEY(AccountID) REFERENCES Users(AccountID)
+                );";
+            
+            command.ExecuteNonQuery();
+        }
+    }
     public void SaveUser(User user)
-    { // Pass the current user object to the function and save data to the DB
-        try
+    {
+        using (var connection = new SqliteConnection(ConnectionString))
         {
-            using (StreamWriter writer = new StreamWriter(Constants.DB_NAME, true))
-            {
-                writer.WriteLine($"{SEPERATOR}");
-                writer.WriteLine($"Account created: {user.dateTime}");
-                writer.WriteLine($"User ID: {user.accountID}");
-                writer.WriteLine($"User name: {user.name}");
-                writer.WriteLine($"User Surname: {user.surname}");
-                writer.WriteLine($"User Password: {user.password}");
-            }
+            connection.Open();
+
+            var cmd = connection.CreateCommand();
+            cmd.CommandText = @"
+                INSERT INTO Users (AccountID, Name, Surname, Password, CreationDate)
+                VALUES ($id, $name, $surname, $password, $date)";
+
+            cmd.Parameters.AddWithValue("$id", user.accountID);
+            cmd.Parameters.AddWithValue("$name", user.name);
+            cmd.Parameters.AddWithValue("$surname", user.surname);
+            cmd.Parameters.AddWithValue("$password", user.password);
+            cmd.Parameters.AddWithValue("$date", user.dateTime.ToString());
+            
+            cmd.ExecuteNonQuery();
         }
-        catch (Exception e)
-        {
-            Console.WriteLine($"Error saving user: {e.Message}");
-        }
-        Console.WriteLine("Save User Successful");
     }
     public void SaveOperation(Operation operation)
     {
@@ -64,52 +96,61 @@ class DataBase
     // Refactor this into a method that can be used for both password and accountID uniqueness checks
     public bool IsPasswordUnique(string password)
     {
-        using (StreamReader reader = new StreamReader(Constants.DB_NAME))
+        using (var connection = new SqliteConnection(ConnectionString))
         {
-            string line;
-            while ((line = reader.ReadLine()) != null)
+            connection.Open();
+            
+            var cmd = connection.CreateCommand();
+            cmd.CommandText = "SELECT COUNT(*) FROM Users WHERE Password = $password";
+            cmd.Parameters.AddWithValue("$password", password);
+            
+            try
             {
-                if (line.Contains(password))
-                {
-                    return false;
-                }
+                UInt16 count = Convert.ToUInt16(cmd.ExecuteScalar());
+                return count == 0;
+            }
+            catch (OverflowException)
+            {
+                Console.WriteLine("Error: Database has too many entries to process this check");
+                return false;
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine($"Error checking password uniqueness: {e.Message}");
+                return false;
             }
         }
-        return true;
     }
     public bool IsAccountIDUnique(UInt64 accountID)
     {
-        using (StreamReader reader = new StreamReader(Constants.DB_NAME))
+        using (var connection = new SqliteConnection(ConnectionString))
         {
-            string line;
-            while ((line = reader.ReadLine()) != null)
+            connection.Open();
+        
+            var cmd = connection.CreateCommand();
+            cmd.CommandText = "SELECT COUNT(*) FROM Users WHERE AccountID = $id";
+            cmd.Parameters.AddWithValue("$id", accountID);
+            
+            try
             {
-                if (line.Contains(accountID.ToString()))
-                {
-                    return false;
-                }
+                UInt16 count = Convert.ToUInt16(cmd.ExecuteScalar());
+                return count == 0;
+            }
+            catch (OverflowException)
+            {
+                Console.WriteLine("Error: Database has too many entries to process this check");
+                return false;
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine($"Error checking account ID uniqueness: {e.Message}");
+                return false;
             }
         }
-        return true;
     }
 #endregion
 // Essentailly the same function as IsAccountIDUnique but used for a different purpose
 #region Private Methods
-    private bool FindUserInDatabase(string accountID)
-    {
-        using (StreamReader reader = new StreamReader("2B.txt"))
-        {
-            string line;
-            while ((line = reader.ReadLine()) != null)
-            {
-                if (line.Contains(accountID)) 
-                {
-                    return true;
-                }
-            }
-        }
-        return false;
-    }
     // - UpdateUserRecord()
 #endregion
 }

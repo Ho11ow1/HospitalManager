@@ -1,0 +1,28 @@
+CREATE TABLE Users 
+(
+    AccountID INTEGER PRIMARY KEY,
+    Name TEXT NOT NULL,
+    Surname TEXT NOT NULL,
+    Password TEXT NOT NULL,
+    CreationDate TEXT NOT NULL
+);
+
+CREATE TABLE Operations 
+(
+    OperationID INTEGER PRIMARY KEY AUTOINCREMENT,
+    AccountID INTEGER,
+    OperationName INTEGER NOT NULL,
+    OperationType INTEGER NOT NULL,
+    OperationStatus INTEGER NOT NULL,
+    OperationCost REAL NOT NULL,
+    OperationDate TEXT NOT NULL,
+    FOREIGN KEY(AccountID) REFERENCES Users(AccountID)
+);
+
+using var connection = new SqliteConnection(ConnectionString);
+{
+    connection.Open();
+    var cmd = connection.CreateCommand();
+    cmd.CommandText = "SQL Query";
+    cmd.Parameters.AddWithValue("$paramName", value);
+}

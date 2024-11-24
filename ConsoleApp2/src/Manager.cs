@@ -17,7 +17,7 @@ class HospitalManager
     {
         if (!_DB.DBExists())
         {
-            File.Create(Constants.DB_NAME).Close();
+            _DB.CreateDB();
         }
         try
         {
@@ -79,7 +79,7 @@ class HospitalManager
                     switch (_choice)
                     {
                         case 1:
-                            _user.ShowDetails();
+                            _user.ShowDetails(_user, _operation);
                         break;
 
                         case 2:
