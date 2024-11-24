@@ -16,6 +16,7 @@ A simple and effective HospitalManager made in ```C#```
   - Define operation types (Medicine, Surgery, Checkup)
   - Manage operation dates and scheduling
   - Update operation status based on time of day
+  - Fixed cost structure for each treatment type (ranging from 100 to 300)
 
 - Data Persistence
   - Automatic database creation and management
@@ -31,20 +32,23 @@ A simple and effective HospitalManager made in ```C#```
 
 ## Database Structure
 
-The database file (`2B.txt`) follows this format:
-```
-=====================
-Account Created: [DateTime]
-Account ID: [UInt64]
-User Name: [string]
-User Surname: [string]
-User Password: [string]
-Operation Name: [string]
-Operation Type: [Medicine|Surgery|Checkup]
-Operation Status: [NULL|Pending|InProgress|Completed]
-Operation Date: [DateTime?]
-=====================
-```
+The SQLite database (`2B.db`) contains two tables:
+
+### Users Table
+- AccountID (INTEGER PRIMARY KEY)
+- Name (TEXT)
+- Surname (TEXT)
+- Password (TEXT)
+- CreationDate (TEXT)
+
+### Operations Table
+- OperationID (INTEGER PRIMARY KEY AUTOINCREMENT)
+- AccountID (INTEGER, FOREIGN KEY)
+- OperationName (INTEGER)
+- OperationType (INTEGER)
+- OperationStatus (INTEGER)
+- OperationCost (REAL)
+- OperationDate (TEXT)
 
 # Installation Guide
 
@@ -82,5 +86,4 @@ If you encounter errors:
 - Make sure you're in the correct directory
 - Verify .NET is installed: `dotnet --version`
 - Check if all source files exist: `dir src\*.cs`
-- Ensure database file (`2B.txt`) has proper read/write permissions
-
+- Ensure database file (`2B.db`) has proper read/write permissions
