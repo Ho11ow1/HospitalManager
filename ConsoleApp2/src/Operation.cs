@@ -7,12 +7,13 @@ class Operation
     public OperationType operationType { get; private set; }
     public OperationStatus operationStatus { get; private set; }
     public double operationCost { get; private set; }
-    public DayOfWeek operationDate { get; private set; } = DateTime.Now.DayOfWeek;
+    public DayOfWeek operationDate { get; private set; }
 #endregion
 
 #region Public Methods
     public void SetOperation()
     {
+        operationDate = DateTime.Now.DayOfWeek;
         // TODO: Implement set operation logic
         /*
             1. Get user input for OperationName, OperationType:
