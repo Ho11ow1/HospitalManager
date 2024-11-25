@@ -16,6 +16,14 @@ public enum OperationType
     Checkup
 }
 
+public enum Drugs
+{
+    NULL = 0,
+    Xanax,
+    Benadryl,
+    Betaloc
+}
+
 public enum OperationStatus
 {
     NULL = 0,
