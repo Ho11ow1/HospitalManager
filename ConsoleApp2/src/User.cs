@@ -23,7 +23,7 @@
             {
                 throw new Exception("We're sorry but this password is already taken, please try a different one.");
             }
-            accountID = GenerateAccountID();
+            accountID = GenerateAccountID(); // Creative decision instead of using AUTOINCREMENT
             if (!DB.IsAccountIDUnique(accountID))
             {
                 throw new Exception("We're sorry but this Account ID is already taken, please try again.");
@@ -45,6 +45,27 @@
     //
     public bool Login()
     {
+        string tempAccountID = Validation.GetValidInput("Enter your Account ID");
+        string tempPassword = Validation.GetValidInput("Enter your password");
+
+        if (!DB.IsAccountIDUnique(tempAccountID))
+        {
+            // throw new Exception("We're sorry but this Account ID is not registered, please try again.");
+            Console.WriteLine("We're sorry but this Account ID is not registered, please try again.");
+
+            return false;
+        }
+        if (!DB.IsPasswordCorrect(tempPassword))
+        {
+            // throw new Exception("We're sorry but this password is incorrect, please try again.");
+            Console.WriteLine("We're sorry but this password is incorrect, please try again.");
+
+            return false;
+        }
+
+        // Seatch inside DB for user with matching Account ID and Password then compare with tempAccountID and tempPassword
+        // If they match then load user data
+        // Else throw exception or return false
         // TODO: Implement login logic
         /*
             1. Get user input with validation:
@@ -71,7 +92,7 @@
     public void ShowDetails(User user, Operation? operation)
     {
         try
-        {// Refactor this into reading data from the DB                // 1. Format user information:
+        {                                                               // 1. Format user information:
             Console.WriteLine($"Account created: {user.dateTime}");    // - User Account Creation Date
             Console.WriteLine($"User ID: {user.accountID}");           // - User Account ID
             Console.WriteLine($"User name: {user.name}");              // - User Name
@@ -93,17 +114,7 @@
             Console.Clear();
             Console.WriteLine($"Error showing user details: {e.Message}");
         }
-        // TODO: Implement show details logic
-        /*
-            3. Display formatting:
-            - Add separators for readability
-            - Handle NULL values appropriately
-            
-            4. Error handling:
-            - Verify data exists
-            - Handle missing information
-        */
-        Console.WriteLine("Show Details Successful");
+        // Console.WriteLine("Show Details Successful"); // DEBUG LOG
     }
 #endregion
 
