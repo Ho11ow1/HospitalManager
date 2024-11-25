@@ -1,7 +1,7 @@
 ﻿class User
 {
 #region Fields and Properties
-    public DateTime dateTime { get; private set; } = DateTime.Now;
+    public DateTime dateTime { get; private set; }
     public string name { get; private set; }
     public string surname { get; private set; }
     public string password { get; private set; }
@@ -15,6 +15,7 @@
     {
         try
         { // Set user details
+            dateTime = DateTime.Now;
             name = Validation.GetValidInput("Enter your name");
             surname = Validation.GetValidInput("Enter your surname");
             password = Validation.GetValidInput("Enter your password");
