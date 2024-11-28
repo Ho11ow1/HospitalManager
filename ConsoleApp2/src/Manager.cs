@@ -3,27 +3,27 @@ using System;
 class HospitalManager
 {
 #region Fields
-    private bool _loggedIn = false;
-    private bool _running = true;
-    private UInt16 _choice = 0;
+    private bool loggedIn = false;
+    private bool running = true;
+    private UInt16 choice = 0;
 
-    private User _user = new User();
-    private Operation _operation = new Operation();
-    private DataBase _DB = new DataBase();
+    private User user = new User();
+    private Operation operation = new Operation();
+    private DataBase DB = new DataBase();
 #endregion
 
 #region Public Methods
     public void Run()
     {
-        if (!_DB.DBExists())
+        if (!DB.DBExists())
         {
-            _DB.CreateDB();
+            DB.CreateDB();
         }
         try
         {
-            while (_running)
+            while (running)
             {
-                if (!_loggedIn)
+                if (!loggedIn)
                 {
                     Console.WriteLine("Welcome to our HospitalManager app\n");
 
@@ -33,23 +33,23 @@ class HospitalManager
                     Console.WriteLine("3. Exit Program");
 
                     Console.Write("Choose option: ");
-                    _choice = Convert.ToUInt16(Console.ReadLine());
+                    choice = Convert.ToUInt16(Console.ReadLine());
 
-                    switch (_choice)
+                    switch (choice)
                     {
                         case 1:
                             Console.Clear();
-                            if (_user.Login()) {_loggedIn = true;}
+                            if (user.Login()) { operation.Load();/*Might just load this into the user login for ease of use*/ loggedIn = true;}
                         break;
 
                         case 2:
                             Console.Clear();
-                            if (_user.Register()) {_loggedIn = true;}
+                            if (user.Register()) {loggedIn = true;}
                         break;
 
                         case 3:
                             Console.WriteLine("Thank you for using our app...");
-                            _running = false;
+                            running = false;
                         break;
 
                         default:
@@ -60,7 +60,7 @@ class HospitalManager
                     continue;
                 }
 
-                while (_running && _loggedIn) 
+                while (running && loggedIn) 
                 {
                     // Console.WriteLine("\n=== Hospital Menu ==="); // DEBUG LOG
                     Console.WriteLine("=== Hospital Menu ===");
@@ -72,31 +72,31 @@ class HospitalManager
                     Console.WriteLine("==================");
 
                     Console.Write("Choose option: ");
-                    _choice = Convert.ToUInt16(Console.ReadLine());
+                    choice = Convert.ToUInt16(Console.ReadLine());
 
                     Console.Clear();
 
-                    switch (_choice)
+                    switch (choice)
                     {
                         case 1:
-                            _user.ShowDetails(_user, _operation);
+                            user.ShowDetails(user);
                         break;
 
                         case 2:
-                            _operation.SetOperation();
+                            operation.SetOperation();
                         break;
 
                         case 3:
-                            _operation.ShowDetails();
+                            operation.ShowDetails(operation);
                         break;
 
                         case 4:
-                            _loggedIn = false;
+                            loggedIn = false;
                         break;
 
                         case 5:
                             Console.WriteLine("Thank you for using our app...");
-                            _running = false;
+                            running = false;
                         break;
 
                         default:

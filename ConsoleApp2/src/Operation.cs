@@ -24,9 +24,6 @@ class Operation
         */
         switch (operationName)
         {
-            case OperationName.NULL:
-                operationCost = (double)OperationCost.NULL;
-                break;
             case OperationName.AnxietyTreatment:
                 operationCost = (double)OperationCost.AnxietyTreatment;
                 break;
@@ -48,10 +45,19 @@ class Operation
         Console.WriteLine("Set Operation Successful");
     }
 
-    public void ShowDetails()
+    public void Load() // Might take in UID and be called in login for no redundancy
     {
-        // TODO: Implement show details logic
-        Console.WriteLine("Show Operation Details Successful");
+        // Load from SQL based on UID, Ask for UID again - Redundant but extra safety measure despite needing it to login
+    }
+
+    public void ShowDetails(Operation operation)
+    {
+        Console.WriteLine($"Operation Name: {operation.operationName}");        // - Operation Name
+        Console.WriteLine($"Operation Type: {operation.operationType}");        // - Operation Type
+        Console.WriteLine($"Operation Status: {operation.operationStatus}");    // - Operation Status
+        Console.WriteLine($"Operation Cost: {operation.operationCost}");        // - Operation Cost
+        Console.WriteLine($"Operation Date: {operation.operationDate}");        // - Operation Date
+        // Console.WriteLine("Show Operation Details Successful"); // DEBUG LOG
     }
 #endregion
 

@@ -16,6 +16,25 @@ public static class Validation
         return input;
     }
 
+    public static UInt64 GetValidNum(string prompt)
+    {
+        UInt64 temp = 0;
+
+        do
+        {
+            Console.Write($"{prompt}: ");
+            temp = Convert.ToUInt64(Console.ReadLine()?.Trim() ?? "");
+        }
+        while (!ValidateNum(temp, Constants.USER_ID_MAX_LENGTH));
+
+        return temp;
+    }
+
+    private static bool ValidateNum(UInt64 input, UInt16 length)
+    {
+        return true;
+    }
+
     private static bool ValidateInput(string input, UInt16 minLength, UInt16 maxLength)
     {
         if (string.IsNullOrWhiteSpace(input))

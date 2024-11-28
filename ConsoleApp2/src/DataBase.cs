@@ -93,61 +93,6 @@ class DataBase
         */
         Console.WriteLine("Save Operation Successful");
     }
-    // Refactor this into a method that can be used for both password and accountID uniqueness checks
-    public bool IsPasswordUnique(string password)
-    {
-        using (var connection = new SqliteConnection(ConnectionString))
-        {
-            connection.Open();
-            
-            var cmd = connection.CreateCommand();
-            cmd.CommandText = "SELECT COUNT(*) FROM Users WHERE Password = $password";
-            cmd.Parameters.AddWithValue("$password", password);
-            
-            try
-            {
-                UInt16 count = Convert.ToUInt16(cmd.ExecuteScalar());
-                return count == 0;
-            }
-            catch (OverflowException)
-            {
-                Console.WriteLine("Error: Database has too many entries to process this check");
-                return false;
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine($"Error checking password uniqueness: {e.Message}");
-                return false;
-            }
-        }
-    }
-    public bool IsAccountIDUnique(UInt64 accountID)
-    {
-        using (var connection = new SqliteConnection(ConnectionString))
-        {
-            connection.Open();
-        
-            var cmd = connection.CreateCommand();
-            cmd.CommandText = "SELECT COUNT(*) FROM Users WHERE AccountID = $id";
-            cmd.Parameters.AddWithValue("$id", accountID);
-            
-            try
-            {
-                UInt16 count = Convert.ToUInt16(cmd.ExecuteScalar());
-                return count == 0;
-            }
-            catch (OverflowException)
-            {
-                Console.WriteLine("Error: Database has too many entries to process this check");
-                return false;
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine($"Error checking account ID uniqueness: {e.Message}");
-                return false;
-            }
-        }
-    }
 #endregion
 // Essentailly the same function as IsAccountIDUnique but used for a different purpose
 #region Private Methods
