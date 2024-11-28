@@ -1,22 +1,22 @@
-public enum OperationName
+public enum Disorder
 {
     NULL = 0,
-    AnxietyTreatment,
-    SchizophreniaTreatment,
-    DepressionTreatment,
-    BipolarDisorderTreatment,
-    PanicAttackTreatment
+    Anxiety,
+    Schizophrenia,
+    Depression,
+    Bipolar,
+    PanicAttack
 }
 
-public enum OperationType
+public enum Treatment
 {
     NULL = 0,
-    Medicine,
+    Medication,
     Surgery,
     Checkup
 }
 
-public enum OperationStatus
+public enum Status
 {
     NULL = 0,
     Pending,
@@ -24,7 +24,7 @@ public enum OperationStatus
     Completed
 }
 
-public enum OperationCost
+public enum Cost
 {
     NULL = 0,
     AnxietyTreatment = 150,
