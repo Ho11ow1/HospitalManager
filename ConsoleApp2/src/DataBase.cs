@@ -60,37 +60,31 @@ class DataBase
             cmd.Parameters.AddWithValue("$name", user.name);
             cmd.Parameters.AddWithValue("$surname", user.surname);
             cmd.Parameters.AddWithValue("$password", user.password);
-            cmd.Parameters.AddWithValue("$date", user.dateTime.ToString());
+            cmd.Parameters.AddWithValue("$date", user.dateTime.ToString("yyyy-MM-dd HH:mm:ss"));
             
             cmd.ExecuteNonQuery();
         }
     }
     public void SaveOperation(Operation operation)
     {
-        // TODO: Implement save operation logic
-        /*
-            1. Locate user record:
-            - Find user by Account_ID
-            - Validate user exists
-            
-            2. Update operation fields:
-            - Operation Name
-            - Operation Type
-            - Operation Status
-            - Operation Cost
-            - Operation Date
-            
-            3. Write updates:
-            - Read entire file
-            - Update specific user's section
-            - Write back entire file
-            - Maintain file format integrity
-            
-            4. Error handling:
-            - Handle file access errors
-            - Handle user not found
-            - Verify update success
-        */
+        using (var connection = new SqliteConnection(ConnectionString))
+        {
+            connection.Open();
+
+            var cmd = connection.CreateCommand();
+            cmd.CommandText = @"
+                INSERT INTO Operations (AccountID, OperationName, OperationType, OperationStatus, OperationCost, OperationDate)
+                VALUES ($AID, $Oname, $Otype, $Ostatus, $Ocost, $Odate)";
+
+            // cmd.Parameters.AddWithValue("$AID", user.accountID); // Not 100% sure about foreign key to link to User account table
+            cmd.Parameters.AddWithValue("$Oname", operation.disorder);
+            cmd.Parameters.AddWithValue("$Otype", operation.treatment);
+            cmd.Parameters.AddWithValue("$Ostatus", operation.status);
+            cmd.Parameters.AddWithValue("$Ocost", operation.cost);
+            cmd.Parameters.AddWithValue("$Odate", operation.date.ToString("yyyy-MM-dd HH:mm:ss"));
+
+            cmd.ExecuteNonQuery();
+        }
         Console.WriteLine("Save Operation Successful");
     }
 #endregion

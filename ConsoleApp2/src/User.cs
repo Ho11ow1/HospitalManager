@@ -75,12 +75,12 @@
     }
     //
     public void ShowDetails(User user)
-    {                                                              // 1. Format user information:
-        Console.WriteLine($"Account created: {user.dateTime}");    // - User Account Creation Date
-        Console.WriteLine($"User ID: {user.accountID}");           // - User Account ID
-        Console.WriteLine($"User name: {user.name}");              // - User Name
-        Console.WriteLine($"User Surname: {user.surname}");        // - User Surname
-        Console.WriteLine($"User Password: {user.password}");      // - User Password
+    {
+        Console.WriteLine($"Account created: {user.dateTime}");
+        Console.WriteLine($"User ID: {user.accountID}");
+        Console.WriteLine($"User name: {user.name}");
+        Console.WriteLine($"User Surname: {user.surname}");
+        Console.WriteLine($"User Password: {user.password}");
 
         // Console.WriteLine("Show Details Successful"); // DEBUG LOG
     }

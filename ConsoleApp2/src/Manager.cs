@@ -7,9 +7,9 @@ class HospitalManager
     private bool running = true;
     private UInt16 choice = 0;
 
-    private User user = new User();
-    private Operation operation = new Operation();
-    private DataBase DB = new DataBase();
+    private readonly User user = new User();
+    private readonly Operation operation = new Operation();
+    private readonly DataBase DB = new DataBase();
 #endregion
 
 #region Public Methods

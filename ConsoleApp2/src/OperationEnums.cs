@@ -1,6 +1,5 @@
 public enum Disorder
 {
-    NULL = 0,
     Anxiety,
     Schizophrenia,
     Depression,
@@ -10,7 +9,6 @@ public enum Disorder
 
 public enum Treatment
 {
-    NULL = 0,
     Medication,
     Surgery,
     Checkup
@@ -18,7 +16,6 @@ public enum Treatment
 
 public enum Status
 {
-    NULL = 0,
     Pending,
     InProgress,
     Completed
@@ -26,7 +23,6 @@ public enum Status
 
 public enum Cost
 {
-    NULL = 0,
     AnxietyTreatment = 150,
     SchizophreniaTreatment = 300,
     DepressionTreatment = 100,

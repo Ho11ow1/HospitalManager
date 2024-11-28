@@ -3,45 +3,52 @@ using System;
 class Operation
 {
 #region Properties
-    public OperationName operationName { get; private set; }
-    public OperationType operationType { get; private set; }
-    public OperationStatus operationStatus { get; private set; }
-    public double operationCost { get; private set; }
-    public DayOfWeek operationDate { get; private set; }
+    public Disorder disorder { get; private set; }
+    public Treatment treatment { get; private set; }
+    public Status status { get; private set; }
+    public double cost { get; private set; }
+    public DayOfWeek date { get; private set; }
+    private UInt16 choice;
+    private DataBase DB = new DataBase();
 #endregion
 
 #region Public Methods
     public void SetOperation()
     {
-        operationDate = DateTime.Now.DayOfWeek;
-        // TODO: Implement set operation logic
-        /*
-            1. Get user input for OperationName, OperationType:
-               - Show user operation options
-               - validate user input
-               - create new operation object
-               - save operation to database
-        */
-        switch (operationName)
+        Console.WriteLine($"1. {Disorder.Anxiety}");
+        Console.WriteLine($"2. {Disorder.Schizophrenia}");
+        Console.WriteLine($"3. {Disorder.Depression}");
+        Console.WriteLine($"4. {Disorder.Bipolar}");
+        Console.WriteLine($"5. {Disorder.PanicAttack}\n");
+
+        choice = Validation.GetValidNum("Which mental disorder do you have");
+        disorder = ((Disorder)choice - 1);
+        // TODO: save operation to database
+        switch (disorder)
         {
-            case OperationName.AnxietyTreatment:
-                operationCost = (double)OperationCost.AnxietyTreatment;
-                break;
-            case OperationName.SchizophreniaTreatment:
-                operationCost = (double)OperationCost.SchizophreniaTreatment;
-                break;
-            case OperationName.DepressionTreatment:
-                operationCost = (double)OperationCost.DepressionTreatment;
-                break;
-            case OperationName.BipolarDisorderTreatment:
-                operationCost = (double)OperationCost.BipolarDisorderTreatment;
-                break;
-            case OperationName.PanicAttackTreatment:
-                operationCost = (double)OperationCost.PanicAttackTreatment;
-                break;
-            default:
-                break;
+            case Disorder.Anxiety:
+                cost = (double)Cost.AnxietyTreatment;
+                treatment = Treatment.Medication;
+            break;
+            case Disorder.Schizophrenia:
+                cost = (double)Cost.SchizophreniaTreatment;
+                treatment = Treatment.Checkup;
+            break;
+            case Disorder.Depression:
+                cost = (double)Cost.DepressionTreatment;
+                treatment = Treatment.Medication;
+            break;
+            case Disorder.Bipolar:
+                cost = (double)Cost.BipolarDisorderTreatment;
+                treatment = Treatment.Checkup;
+            break;
+            case Disorder.PanicAttack:
+                cost = (double)Cost.PanicAttackTreatment;
+                treatment = Treatment.Checkup;
+            break;
         }
+        // DB.SaveOperation(this);
+        Console.Clear();
         Console.WriteLine("Set Operation Successful");
     }
 
@@ -52,11 +59,11 @@ class Operation
 
     public void ShowDetails(Operation operation)
     {
-        Console.WriteLine($"Operation Name: {operation.operationName}");        // - Operation Name
-        Console.WriteLine($"Operation Type: {operation.operationType}");        // - Operation Type
-        Console.WriteLine($"Operation Status: {operation.operationStatus}");    // - Operation Status
-        Console.WriteLine($"Operation Cost: {operation.operationCost}");        // - Operation Cost
-        Console.WriteLine($"Operation Date: {operation.operationDate}");        // - Operation Date
+        Console.WriteLine($"Operation Name: {operation.disorder}");
+        Console.WriteLine($"Operation Type: {operation.treatment}");
+        Console.WriteLine($"Operation Status: {operation.status}");
+        Console.WriteLine($"Operation Cost: {operation.cost}");
+        Console.WriteLine($"Operation Date: {operation.date}");
         // Console.WriteLine("Show Operation Details Successful"); // DEBUG LOG
     }
 #endregion
