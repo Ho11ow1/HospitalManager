@@ -1,7 +1,7 @@
 ﻿class User
 {
 #region Fields and Properties
-    public DateTime dateTime { get; private set; } = DateTime.Now;
+    public DateTime dateTime { get; private set; }
     public string name { get; private set; }
     public string surname { get; private set; }
     public string password { get; private set; }
@@ -15,18 +15,11 @@
     {
         try
         { // Set user details
+            dateTime = DateTime.Now;
             name = Validation.GetValidInput("Enter your name");
             surname = Validation.GetValidInput("Enter your surname");
             password = Validation.GetValidInput("Enter your password");
-            if (!DB.IsPasswordUnique(password))
-            {
-                throw new Exception("We're sorry but this password is already taken, please try a different one.");
-            }
-            accountID = GenerateAccountID();
-            if (!DB.IsAccountIDUnique(accountID))
-            {
-                throw new Exception("We're sorry but this Account ID is already taken, please try again.");
-            }
+            accountID = GenerateAccountID(); // Creative decision instead of using AUTOINCREMENT
         }
         catch (Exception e)
         {
@@ -36,7 +29,7 @@
             return false;
         }
 
-        DB.SaveUser(this); // Essentailly Pass the current user object to the function
+        // DB.SaveUser(this); // Essentailly Pass the current user object to the function
         Console.WriteLine("Register Successful");
 
         return true;
@@ -44,6 +37,20 @@
     //
     public bool Login()
     {
+        UInt64 tempAccountID = Validation.GetValidNum("Enter your Account ID");
+        string tempPassword = Validation.GetValidInput("Enter your password");
+
+        // if (temp == real)
+        // {
+           // Assign each account value from DB
+           // Assign each operation value from DB -- Probably a different method from operation class for ease of use which will probably be the case to call 2 methods so
+           //                                                                                                                            if this returns true just load it
+           // return true;
+        // }
+
+        // Seatch inside DB for user with matching Account ID and Password then compare with tempAccountID and tempPassword
+        // If they match then load user data
+        // Else throw exception or return false
         // TODO: Implement login logic
         /*
             1. Get user input with validation:
@@ -67,47 +74,20 @@
         return true;
     }
     //
-    public void ShowDetails(User user, Operation? operation)
+    public void ShowDetails(User user)
     {
-        try
-        {// Refactor this into reading data from the DB                // 1. Format user information:
-            Console.WriteLine($"Account created: {user.dateTime}");    // - User Account Creation Date
-            Console.WriteLine($"User ID: {user.accountID}");           // - User Account ID
-            Console.WriteLine($"User name: {user.name}");              // - User Name
-            Console.WriteLine($"User Surname: {user.surname}");        // - User Surname
-            Console.WriteLine($"User Password: {user.password}");      // - User Password
+        Console.WriteLine($"Account created: {user.dateTime}");
+        Console.WriteLine($"User ID: {user.accountID}");
+        Console.WriteLine($"User name: {user.name}");
+        Console.WriteLine($"User Surname: {user.surname}");
+        Console.WriteLine($"User Password: {user.password}");
 
-            if (operation != null)
-            {                                                                           // 2. Format operation details:
-                Console.WriteLine($"Operation Name: {operation.operationName}");        // - Operation Name
-                Console.WriteLine($"Operation Type: {operation.operationType}");        // - Operation Type
-                Console.WriteLine($"Operation Status: {operation.operationStatus}");    // - Operation Status
-                Console.WriteLine($"Operation Cost: {operation.operationCost}");        // - Operation Cost
-                Console.WriteLine($"Operation Date: {operation.operationDate}");        // - Operation Date
-            }
-            //Console.WriteLine("Show Details Successful"); // DEBUG LOG
-        }
-        catch (Exception e)
-        {
-            Console.Clear();
-            Console.WriteLine($"Error showing user details: {e.Message}");
-        }
-        // TODO: Implement show details logic
-        /*
-            3. Display formatting:
-            - Add separators for readability
-            - Handle NULL values appropriately
-            
-            4. Error handling:
-            - Verify data exists
-            - Handle missing information
-        */
-        Console.WriteLine("Show Details Successful");
+        // Console.WriteLine("Show Details Successful"); // DEBUG LOG
     }
 #endregion
 
 #region Private Methods
-    private UInt64 GenerateAccountID()
+    private UInt64 GenerateAccountID() // Creative decision instead of AUTOINCREMENT
     {
         Random random = new Random();
         return (UInt64)random.Next((int)Constants.USER_ID_MIN, (int)Constants.USER_ID_MAX);

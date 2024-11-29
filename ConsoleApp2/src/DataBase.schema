@@ -19,7 +19,7 @@ CREATE TABLE Operations
     FOREIGN KEY(AccountID) REFERENCES Users(AccountID)
 );
 
-using var connection = new SqliteConnection(ConnectionString);
+using (var connection = new SqliteConnection(ConnectionString))
 {
     connection.Open();
     var cmd = connection.CreateCommand();
