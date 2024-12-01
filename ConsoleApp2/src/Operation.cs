@@ -7,13 +7,15 @@ class Operation
     public Treatment treatment { get; private set; }
     public Status status { get; private set; }
     public double cost { get; private set; }
-    public DayOfWeek date { get; private set; }
+    public DateTime date { get; private set; }
+    public UInt64 ID { get; private set; }
+
     private UInt16 choice;
     private DataBase DB = new DataBase();
 #endregion
 
 #region Public Methods
-    public void SetOperation()
+    public void SetOperation(UInt64 accountID)
     {
         Console.WriteLine($"1. {Disorder.Anxiety}");
         Console.WriteLine($"2. {Disorder.Schizophrenia}");
@@ -23,7 +25,6 @@ class Operation
 
         choice = Validation.GetValidNum("Which mental disorder do you have");
         disorder = ((Disorder)choice - 1);
-        // TODO: save operation to database
         switch (disorder)
         {
             case Disorder.Anxiety:
@@ -47,16 +48,15 @@ class Operation
                 treatment = Treatment.Checkup;
             break;
         }
-        // DB.SaveOperation(this);
+
+        date = DateTime.Now;
+        ID = accountID;
+
+        DB.SaveOperation(this); // Has an issue with passing Enums
         Console.Clear();
         Console.WriteLine("Set Operation Successful");
     }
-
-    public void Load() // Might take in UID and be called in login for no redundancy
-    {
-        // Load from SQL based on UID, Ask for UID again - Redundant but extra safety measure despite needing it to login
-    }
-
+    // 
     public void ShowDetails(Operation operation)
     {
         Console.WriteLine($"Operation Name: {operation.disorder}");
@@ -66,6 +66,8 @@ class Operation
         Console.WriteLine($"Operation Date: {operation.date}");
         // Console.WriteLine("Show Operation Details Successful"); // DEBUG LOG
     }
+    //
+
 #endregion
 
 #region Private Methods

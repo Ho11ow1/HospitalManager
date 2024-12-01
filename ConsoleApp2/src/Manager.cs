@@ -39,7 +39,7 @@ class HospitalManager
                     {
                         case 1:
                             Console.Clear();
-                            if (user.Login()) { operation.Load();/*Might just load this into the user login for ease of use*/ loggedIn = true;}
+                            if (user.Login()) {loggedIn = true;}
                         break;
 
                         case 2:
@@ -83,7 +83,7 @@ class HospitalManager
                         break;
 
                         case 2:
-                            operation.SetOperation();
+                            operation.SetOperation(user.accountID);
                         break;
 
                         case 3:

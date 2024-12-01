@@ -13,6 +13,7 @@ class DataBase
     {
         return File.Exists(Constants.DB_NAME);
     }
+
     public void CreateDB()
     {
         using (var connection = new SqliteConnection(ConnectionString))
@@ -34,17 +35,18 @@ class DataBase
                 (
                     OperationID INTEGER PRIMARY KEY AUTOINCREMENT,
                     AccountID INTEGER NOT NULL,
-                    OperationName INTEGER NOT NULL,
-                    OperationType INTEGER NOT NULL,
-                    OperationStatus INTEGER NOT NULL,
-                    OperationCost REAL NOT NULL,
-                    OperationDate TEXT NOT NULL,
+                    Disorder INTEGER NOT NULL,
+                    Treatment INTEGER NOT NULL,
+                    Status INTEGER NOT NULL,
+                    Cost REAL NOT NULL,
+                    Date TEXT NOT NULL,
                     FOREIGN KEY(AccountID) REFERENCES Users(AccountID)
                 );";
             
             command.ExecuteNonQuery();
         }
     }
+
     public void SaveUser(User user)
     {
         using (var connection = new SqliteConnection(ConnectionString))
@@ -54,17 +56,18 @@ class DataBase
             var cmd = connection.CreateCommand();
             cmd.CommandText = @"
                 INSERT INTO Users (AccountID, Name, Surname, Password, CreationDate)
-                VALUES ($id, $name, $surname, $password, $date)";
+                VALUES ($AccountID, $Name, $Surname, $Password, $Date)";
 
-            cmd.Parameters.AddWithValue("$id", user.accountID);
-            cmd.Parameters.AddWithValue("$name", user.name);
-            cmd.Parameters.AddWithValue("$surname", user.surname);
-            cmd.Parameters.AddWithValue("$password", user.password);
-            cmd.Parameters.AddWithValue("$date", user.dateTime.ToString("yyyy-MM-dd HH:mm:ss"));
+            cmd.Parameters.AddWithValue("$AccountID", user.accountID);
+            cmd.Parameters.AddWithValue("$Name", user.name);
+            cmd.Parameters.AddWithValue("$Surname", user.surname);
+            cmd.Parameters.AddWithValue("$Password", user.password);
+            cmd.Parameters.AddWithValue("$Date", user.dateTime.ToString("yyyy-MM-dd HH:mm:ss"));
             
             cmd.ExecuteNonQuery();
         }
     }
+
     public void SaveOperation(Operation operation)
     {
         using (var connection = new SqliteConnection(ConnectionString))
@@ -73,23 +76,34 @@ class DataBase
 
             var cmd = connection.CreateCommand();
             cmd.CommandText = @"
-                INSERT INTO Operations (AccountID, OperationName, OperationType, OperationStatus, OperationCost, OperationDate)
-                VALUES ($AID, $Oname, $Otype, $Ostatus, $Ocost, $Odate)";
+                INSERT INTO Operations (AccountID, Disorder, Treatment, Status, Cost, Date)
+                VALUES ($accountId, $disorder, $treatment, $status, $cost, $date)";
 
-            // cmd.Parameters.AddWithValue("$AID", user.accountID); // Not 100% sure about foreign key to link to User account table
-            cmd.Parameters.AddWithValue("$Oname", operation.disorder);
-            cmd.Parameters.AddWithValue("$Otype", operation.treatment);
-            cmd.Parameters.AddWithValue("$Ostatus", operation.status);
-            cmd.Parameters.AddWithValue("$Ocost", operation.cost);
-            cmd.Parameters.AddWithValue("$Odate", operation.date.ToString("yyyy-MM-dd HH:mm:ss"));
+            cmd.Parameters.AddWithValue("$accountId", operation.ID);
+            cmd.Parameters.AddWithValue("$disorder", (int)operation.disorder + 1);
+            cmd.Parameters.AddWithValue("$treatment", (int)operation.treatment + 1);
+            cmd.Parameters.AddWithValue("$status", (int)operation.status + 1);
+            cmd.Parameters.AddWithValue("$cost", operation.cost);
+            cmd.Parameters.AddWithValue("$date", operation.date.ToString("yyyy-MM-dd HH:mm:ss"));
 
             cmd.ExecuteNonQuery();
         }
         Console.WriteLine("Save Operation Successful");
     }
+
+    public void GetUser(UInt64 accountID, string password)
+    {
+        using (var connection = new SqliteConnection(ConnectionString))
+        {
+            connection.Open();
+            
+            
+            
+        }
+    }
+
 #endregion
-// Essentailly the same function as IsAccountIDUnique but used for a different purpose
+
 #region Private Methods
-    // - UpdateUserRecord()
 #endregion
 }

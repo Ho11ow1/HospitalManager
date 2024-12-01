@@ -30,6 +30,44 @@ public static class Validation
         return temp;
     }
 
+    public static UInt64 GetValid64(string prompt)
+    {
+        UInt64 temp;
+
+        do
+        {
+            Console.Write($"{prompt}?: ");
+            temp = Convert.ToUInt64(Console.ReadLine()?.Trim() ?? "");
+        }
+        while (!Validate64(temp, Constants.USER_ID_MAX_LENGTH));
+
+        return temp;
+    }
+
+    private static bool Validate64(UInt64 input, UInt16 length)
+    {
+        UInt16 count = 0;
+
+        if (input <= 0)
+        {
+            Console.WriteLine("Input cannot be 0");
+            return false;
+        }
+
+        while (input > 0)
+        {
+            input /= 10;
+            count++;
+        }
+
+        if (count > 16)
+        {
+            return false;
+        }
+
+        return true;
+    }
+
     private static bool ValidateNum(UInt16 input, UInt16 length)
     {
         UInt16 count = 0;
