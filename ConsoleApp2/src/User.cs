@@ -15,7 +15,7 @@
     public bool Register()
     {
         try
-        { // Set user details
+        {
             dateTime = DateTime.Now;
             name = Validation.GetValidInput("Enter your name");
             surname = Validation.GetValidInput("Enter your surname");
@@ -43,22 +43,9 @@
             UInt64 tempAccountID = Validation.GetValid64("Enter your Account ID");
             string tempPassword = Validation.GetValidInput("Enter your password");
 
-            // Query DB, If exists laod User & Operation, else return
+            // Implement logic from a DB fetch
 
-            //if (!DB.FindUser(tempAccountID))
-            //{
-            //    return false;
-            //}
-
-            //dateTime = DateTime.Now;
-            //name = DB;
-            //surname = DB;
-            //password = DB;
-            //accountID = DB;
-
-            //LoadOperation();
-
-            Console.WriteLine("Login Successful");
+            // Console.WriteLine("Login Successful");
             return true;
         }
         catch (Exception e)

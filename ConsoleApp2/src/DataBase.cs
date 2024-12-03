@@ -33,7 +33,6 @@ class DataBase
 
                 CREATE TABLE IF NOT EXISTS Operations 
                 (
-                    OperationID INTEGER PRIMARY KEY AUTOINCREMENT,
                     AccountID INTEGER NOT NULL,
                     Disorder INTEGER NOT NULL,
                     Treatment INTEGER NOT NULL,
@@ -66,6 +65,7 @@ class DataBase
             
             cmd.ExecuteNonQuery();
         }
+        // Console.WriteLine("Save User Successful");
     }
 
     public void SaveOperation(Operation operation)
@@ -79,7 +79,7 @@ class DataBase
                 INSERT INTO Operations (AccountID, Disorder, Treatment, Status, Cost, Date)
                 VALUES ($accountId, $disorder, $treatment, $status, $cost, $date)";
 
-            cmd.Parameters.AddWithValue("$accountId", operation.ID);
+            cmd.Parameters.AddWithValue("$accountId", operation.oaccountID);
             cmd.Parameters.AddWithValue("$disorder", (int)operation.disorder + 1);
             cmd.Parameters.AddWithValue("$treatment", (int)operation.treatment + 1);
             cmd.Parameters.AddWithValue("$status", (int)operation.status + 1);
@@ -88,22 +88,41 @@ class DataBase
 
             cmd.ExecuteNonQuery();
         }
-        Console.WriteLine("Save Operation Successful");
+        // Console.WriteLine("Save Operation Successful");
     }
 
-    public void GetUser(UInt64 accountID, string password)
+    public void DisplayOperation(Operation operation)
     {
         using (var connection = new SqliteConnection(ConnectionString))
         {
             connection.Open();
-            
-            
-            
+
+            var cmd = connection.CreateCommand();
+            cmd.CommandText = @"
+                SELECT Disorder, Treatment, Status, Cost, Date 
+                FROM Operations
+                WHERE AccountID = @AccountID
+                ORDER BY Date ASC";
+
+            cmd.Parameters.AddWithValue("@AccountID", operation.oaccountID);
+
+            using (var reader = cmd.ExecuteReader())
+            {
+                while (reader.Read())
+                {
+                    Console.WriteLine("Disorder: {0}, Treatment: {1}, Status: {2}, Cost: {3}, Date: {4}",
+                        reader["Disorder"],
+                        reader["Treatment"],
+                        reader["Status"],
+                        reader["Cost"],
+                        reader["Date"]);
+                }
+            }
         }
     }
 
-#endregion
+    #endregion
 
-#region Private Methods
-#endregion
+    #region Private Methods
+    #endregion
 }

@@ -8,7 +8,7 @@ class Operation
     public Status status { get; private set; }
     public double cost { get; private set; }
     public DateTime date { get; private set; }
-    public UInt64 ID { get; private set; }
+    public UInt64 oaccountID { get; private set; }
 
     private UInt16 choice;
     private DataBase DB = new DataBase();
@@ -30,43 +30,37 @@ class Operation
             case Disorder.Anxiety:
                 cost = (double)Cost.AnxietyTreatment;
                 treatment = Treatment.Medication;
-            break;
+                break;
             case Disorder.Schizophrenia:
                 cost = (double)Cost.SchizophreniaTreatment;
                 treatment = Treatment.Checkup;
-            break;
+                break;
             case Disorder.Depression:
                 cost = (double)Cost.DepressionTreatment;
                 treatment = Treatment.Medication;
-            break;
+                break;
             case Disorder.Bipolar:
                 cost = (double)Cost.BipolarDisorderTreatment;
                 treatment = Treatment.Checkup;
-            break;
+                break;
             case Disorder.PanicAttack:
                 cost = (double)Cost.PanicAttackTreatment;
                 treatment = Treatment.Checkup;
-            break;
+                break;
         }
 
+        oaccountID = accountID;
         date = DateTime.Now;
-        ID = accountID;
 
-        DB.SaveOperation(this); // Has an issue with passing Enums
-        Console.Clear();
+        DB.SaveOperation(this);
         Console.WriteLine("Set Operation Successful");
     }
     // 
     public void ShowDetails(Operation operation)
     {
-        Console.WriteLine($"Operation Name: {operation.disorder}");
-        Console.WriteLine($"Operation Type: {operation.treatment}");
-        Console.WriteLine($"Operation Status: {operation.status}");
-        Console.WriteLine($"Operation Cost: {operation.cost}");
-        Console.WriteLine($"Operation Date: {operation.date}");
-        // Console.WriteLine("Show Operation Details Successful"); // DEBUG LOG
+        DB.DisplayOperation(operation);
+        // Console.WriteLine("Show Operation Details Successful");
     }
-    //
 
 #endregion
 
