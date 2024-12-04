@@ -1,0 +1,28 @@
+CREATE TABLE Users 
+(
+    AccountID INTEGER PRIMARY KEY,
+    Name TEXT NOT NULL,
+    Surname TEXT NOT NULL,
+    Password TEXT NOT NULL,
+    CreationDate TEXT NOT NULL CHECK (CreationDate LIKE '____-__-__ __:__:__')
+);
+
+CREATE TABLE Operations 
+(
+    OperationID INTEGER PRIMARY KEY AUTOINCREMENT,
+    AccountID INTEGER,
+    OperationName INTEGER NOT NULL CHECK (OperationName BETWEEN 0 AND 5),
+    OperationType INTEGER NOT NULL CHECK (OperationType BETWEEN 0 AND 3),
+    OperationStatus INTEGER NOT NULL CHECK (OperationStatus BETWEEN 0 AND 3),
+    OperationCost REAL NOT NULL CHECK (OperationCost >= 0),
+    OperationDate TEXT NOT NULL CHECK (OperationDate LIKE '____-__-__ __:__:__'),
+    FOREIGN KEY(AccountID) REFERENCES Users(AccountID)
+);
+
+using (var connection = new SqliteConnection(ConnectionString))
+{
+    connection.Open();
+    var cmd = connection.CreateCommand();
+    cmd.CommandText = "SQL Query";
+    cmd.Parameters.AddWithValue("$paramName", value);
+}
