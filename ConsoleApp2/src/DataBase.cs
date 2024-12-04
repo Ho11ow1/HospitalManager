@@ -1,11 +1,9 @@
-using System;
-using System.IO;
 using Microsoft.Data.Sqlite;
 
 class DataBase
 {
 #region Constants
-    private const string ConnectionString = "Data Source=" + Constants.DB_NAME;
+    public const string ConnectionString = "Data Source=" + Constants.DB_NAME;
 #endregion
 
 #region Public Methods
@@ -48,45 +46,63 @@ class DataBase
 
     public void SaveUser(User user)
     {
-        using (var connection = new SqliteConnection(ConnectionString))
+        try
         {
-            connection.Open();
+            using (var connection = new SqliteConnection(ConnectionString))
+            {
+                connection.Open();
 
-            var cmd = connection.CreateCommand();
-            cmd.CommandText = @"
-                INSERT INTO Users (AccountID, Name, Surname, Password, CreationDate)
-                VALUES ($AccountID, $Name, $Surname, $Password, $Date)";
+                var cmd = connection.CreateCommand();
+                cmd.CommandText = @"
+                    INSERT INTO Users (AccountID, Name, Surname, Password, CreationDate)
+                    VALUES ($AccountID, $Name, $Surname, $Password, $Date)";
 
-            cmd.Parameters.AddWithValue("$AccountID", user.accountID);
-            cmd.Parameters.AddWithValue("$Name", user.name);
-            cmd.Parameters.AddWithValue("$Surname", user.surname);
-            cmd.Parameters.AddWithValue("$Password", user.password);
-            cmd.Parameters.AddWithValue("$Date", user.dateTime.ToString("yyyy-MM-dd HH:mm:ss"));
-            
-            cmd.ExecuteNonQuery();
+                cmd.Parameters.AddWithValue("$AccountID", user.accountID);
+                cmd.Parameters.AddWithValue("$Name", user.name);
+                cmd.Parameters.AddWithValue("$Surname", user.surname);
+                cmd.Parameters.AddWithValue("$Password", user.password);
+                cmd.Parameters.AddWithValue("$Date", user.dateTime.ToString("yyyy-MM-dd HH:mm:ss"));
+                
+                cmd.ExecuteNonQuery();
+                
+                return;
+            }
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine($"Save User failed: {e.Message}");
         }
         // Console.WriteLine("Save User Successful");
     }
 
     public void SaveOperation(Operation operation)
     {
-        using (var connection = new SqliteConnection(ConnectionString))
+        try
         {
-            connection.Open();
+            using (var connection = new SqliteConnection(ConnectionString))
+            {
+                connection.Open();
 
-            var cmd = connection.CreateCommand();
-            cmd.CommandText = @"
-                INSERT INTO Operations (AccountID, Disorder, Treatment, Status, Cost, Date)
-                VALUES ($accountId, $disorder, $treatment, $status, $cost, $date)";
+                var cmd = connection.CreateCommand();
+                cmd.CommandText = @"
+                    INSERT INTO Operations (AccountID, Disorder, Treatment, Status, Cost, Date)
+                    VALUES ($accountId, $disorder, $treatment, $status, $cost, $date)";
 
-            cmd.Parameters.AddWithValue("$accountId", operation.oaccountID);
-            cmd.Parameters.AddWithValue("$disorder", (int)operation.disorder + 1);
-            cmd.Parameters.AddWithValue("$treatment", (int)operation.treatment + 1);
-            cmd.Parameters.AddWithValue("$status", (int)operation.status + 1);
-            cmd.Parameters.AddWithValue("$cost", operation.cost);
-            cmd.Parameters.AddWithValue("$date", operation.date.ToString("yyyy-MM-dd HH:mm:ss"));
+                cmd.Parameters.AddWithValue("$accountId", operation.oaccountID);
+                cmd.Parameters.AddWithValue("$disorder", (int)operation.disorder);
+                cmd.Parameters.AddWithValue("$treatment", (int)operation.treatment);
+                cmd.Parameters.AddWithValue("$status", (int)operation.status);
+                cmd.Parameters.AddWithValue("$cost", operation.cost);
+                cmd.Parameters.AddWithValue("$date", operation.date.ToString("yyyy-MM-dd HH:mm:ss"));
 
-            cmd.ExecuteNonQuery();
+                cmd.ExecuteNonQuery();
+
+                return;
+            }
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine($"Save Operation failed: {e.Message}");
         }
         // Console.WriteLine("Save Operation Successful");
     }
@@ -110,10 +126,14 @@ class DataBase
             {
                 while (reader.Read())
                 {
+                    var disorder = (Disorder)reader.GetInt32(reader.GetOrdinal("Disorder"));
+                    var treatment = (Treatment)reader.GetInt32(reader.GetOrdinal("Treatment"));
+                    var status = (Status)reader.GetInt32(reader.GetOrdinal("Status"));
+
                     Console.WriteLine("Disorder: {0}, Treatment: {1}, Status: {2}, Cost: {3}, Date: {4}",
-                        reader["Disorder"],
-                        reader["Treatment"],
-                        reader["Status"],
+                        disorder.ToString(),
+                        treatment.ToString(),
+                        status.ToString(),
                         reader["Cost"],
                         reader["Date"]);
                 }

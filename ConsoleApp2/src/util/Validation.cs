@@ -36,7 +36,7 @@ public static class Validation
 
         do
         {
-            Console.Write($"{prompt}?: ");
+            Console.Write($"{prompt}: ");
             temp = Convert.ToUInt64(Console.ReadLine()?.Trim() ?? "");
         }
         while (!Validate64(temp, Constants.USER_ID_MAX_LENGTH));
@@ -72,7 +72,7 @@ public static class Validation
     {
         UInt16 count = 0;
 
-        if (input <= 0 || input > 5)
+        if (input <= 0 || input > 6)
         {
             Console.WriteLine("Input option must be one of the shown options");
             return false;

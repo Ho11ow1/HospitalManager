@@ -1,4 +1,6 @@
-﻿class User
+﻿using Microsoft.Data.Sqlite;
+
+class User
 {
 #region Fields and Properties
     public DateTime dateTime { get; private set; }
@@ -38,21 +40,39 @@
     //
     public bool Login()
     {
-        try
-        {
-            UInt64 tempAccountID = Validation.GetValid64("Enter your Account ID");
-            string tempPassword = Validation.GetValidInput("Enter your password");
+        UInt64 tempAccountID = Validation.GetValid64("Enter your Account ID");
+        string tempPassword = Validation.GetValidInput("Enter your password");
 
-            // Implement logic from a DB fetch
-
-            // Console.WriteLine("Login Successful");
-            return true;
-        }
-        catch (Exception e)
+        using (var connection = new SqliteConnection(DataBase.ConnectionString))
         {
-            Console.WriteLine($"Login failed: {e.Message}");
-            return false;
+            connection.Open();
+            var cmd = connection.CreateCommand();
+            cmd.CommandText = @"
+                SELECT Name, Surname, CreationDate
+                FROM Users
+                WHERE AccountID = @AccountID AND Password = @Password";
+
+            cmd.Parameters.AddWithValue("@AccountID", tempAccountID);
+            cmd.Parameters.AddWithValue("@Password", tempPassword);
+
+            using (var reader = cmd.ExecuteReader())
+            {
+                if (!reader.Read())
+                {
+                    Console.WriteLine("Login failed: Invalid Account ID or Password.");
+                    return false;
+                }
+
+                dateTime = reader.GetDateTime(reader.GetOrdinal("CreationDate"));
+                name = reader.GetString(reader.GetOrdinal("Name"));
+                surname = reader.GetString(reader.GetOrdinal("Surname"));
+                password = tempPassword;
+                accountID = tempAccountID;
+
+            }
         }
+        // Console.WriteLine("Login Successful");
+        return true;
     }
     //
     public void ShowDetails(User user)
