@@ -59,7 +59,6 @@ public static class Validation
             input /= 10;
             count++;
         }
-
         if (count > 16)
         {
             return false;
@@ -99,7 +98,6 @@ public static class Validation
             Console.WriteLine("Input cannot be empty.");
             return false;
         }
-
         if (!IsAlpha(input))
         {
             Console.WriteLine("Input must contain only letters.");
