@@ -95,7 +95,3 @@ If you encounter errors:
 - Check if all source files exist: `dir src\*.cs`
 - Ensure database file (`2B.db`) has proper read/write permissions
 - Verify SQLite dependencies are properly installed
-<<<<<<< HEAD
-=======
-
->>>>>>> Dev
