@@ -75,13 +75,13 @@ class User
         return true;
     }
     //
-    public void ShowDetails(User user)
+    public void ShowDetails()
     {
-        Console.WriteLine($"Account created: {user.dateTime}");
-        Console.WriteLine($"User ID: {user.accountID}");
-        Console.WriteLine($"User name: {user.name}");
-        Console.WriteLine($"User Surname: {user.surname}");
-        Console.WriteLine($"User Password: {user.password}");
+        Console.WriteLine($"Account created: {dateTime}");
+        Console.WriteLine($"User ID: {accountID}");
+        Console.WriteLine($"User name: {name}");
+        Console.WriteLine($"User Surname: {surname}");
+        Console.WriteLine($"User Password: {password}");
 
         // Console.WriteLine("Show Details Successful"); // DEBUG LOG
     }

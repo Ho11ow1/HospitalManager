@@ -9,6 +9,7 @@ class Operation
     public double cost { get; private set; }
     public DateTime date { get; private set; }
     public UInt64 oaccountID { get; private set; }
+    public bool TimeToTreat = false;
 
     private UInt16 choice;
     private DataBase DB = new DataBase();
@@ -85,8 +86,8 @@ class Operation
             {
                 if (!reader.Read())
                 {
-                    Console.WriteLine($"Login failed: Couldn't find operation details for ID: {accountID}.");
-                    return false;
+                    Console.WriteLine($"No operation details exist for ID: {accountID}.");
+                    return true;
                 }
                 disorder = (Disorder)reader.GetInt16(reader.GetOrdinal("Disorder"));
                 treatment = (Treatment)reader.GetInt16(reader.GetOrdinal("Treatment"));
@@ -107,9 +108,51 @@ class Operation
         // Console.WriteLine("Show Operation Details Successful");
     }
 
-#endregion
+    public void Treat(Operation operation)
+    {
+        Treatment treatmentType = DB.GetTreatment(operation);
+        switch (treatmentType)
+        {
+            case Treatment.Medication:
+                Medication();
+                break;
 
-#region Private Methods
-    
-#endregion
+            case Treatment.Surgery:
+                Surgery();
+                break;
+
+            case Treatment.Checkup:
+                Checkup();
+                break;
+        }
+    }
+
+    public void Medication()
+    {
+        // Apply an effect
+
+
+
+    }
+
+    public void Surgery()
+    {
+        // Possibly kill the user and remove him from the DB
+
+
+
+    }
+
+    public void Checkup()
+    {
+        // Just talk and return or send to Medicate and update DB based on response
+
+
+
+    }
+
+    #endregion
+
+    #region Private Methods
+    #endregion
 }

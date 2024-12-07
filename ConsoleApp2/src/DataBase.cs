@@ -141,6 +141,63 @@ class DataBase
         }
     }
 
+    public void CheckOperations(Operation operation)
+    {
+        using (var connection = new SqliteConnection(ConnectionString))
+        {
+            connection.Open();
+
+            var cmd = connection.CreateCommand();
+            cmd.CommandText = @"
+                SELECT Status, Treatment, strftime('%Y-%m-%d %H', Date) AS FormattedDate
+                FROM Operations
+                WHERE AccountID = @AccountID 
+                ORDER BY Date ASC";
+
+            cmd.Parameters.AddWithValue("@AccountID", operation.oaccountID);
+
+            using (var reader = cmd.ExecuteReader())
+            {
+                while (reader.Read())
+                {
+                    var status = (Status)reader.GetInt16(reader.GetOrdinal("Status"));
+                    if (status == Status.Pending && (string)reader["FormattedDate"] == DateTime.Now.ToString("yyyy-MM-dd HH"))
+                    {
+                        operation.TimeToTreat = true;
+                        Console.WriteLine("Pending Operation!!!!!!!!");
+                    }
+                }
+            }
+        }
+    }
+
+    public Treatment GetTreatment(Operation operation)
+    {
+        using (var connection = new SqliteConnection(ConnectionString))
+        {
+            connection.Open();
+
+            var cmd = connection.CreateCommand();
+            cmd.CommandText = @"
+                SELECT Treatment
+                FROM Operations
+                WHERE AccountID = @AccountID 
+                ORDER BY Date ASC";
+
+            cmd.Parameters.AddWithValue("@AccountID", operation.oaccountID);
+
+            using (var reader = cmd.ExecuteReader())
+            {
+                while (reader.Read())
+                {
+                    var treatment = (Treatment)reader.GetInt16(reader.GetOrdinal("Treatment"));
+                    return treatment;
+                }
+            }
+        }
+        return default;
+    }
+
     #endregion
 
     #region Private Methods

@@ -62,6 +62,7 @@ class HospitalManager
 
                 while (running && loggedIn) 
                 {
+                    DB.CheckOperations(operation);
                     // Console.WriteLine("\n=== Hospital Menu ==="); // DEBUG LOG
                     Console.WriteLine("=== Hospital Menu ===");
                     Console.WriteLine("1. Show User Details");
@@ -69,6 +70,10 @@ class HospitalManager
                     Console.WriteLine("3. Show Operation Details");
                     Console.WriteLine("4. Logout");
                     Console.WriteLine("5. Exit Program");
+                    if (operation.TimeToTreat == true)
+                    {
+                        Console.WriteLine("6. Take treatment");
+                    }
                     Console.WriteLine("==================");
 
                     Console.Write("Choose option: ");
@@ -79,7 +84,7 @@ class HospitalManager
                     switch (choice)
                     {
                         case 1:
-                            user.ShowDetails(user);
+                            user.ShowDetails();
                         break;
 
                         case 2:
@@ -91,12 +96,17 @@ class HospitalManager
                         break;
 
                         case 4:
+                            operation.TimeToTreat = false;
                             loggedIn = false;
                         break;
 
                         case 5:
                             Console.WriteLine("Thank you for using our app...");
                             running = false;
+                        break;
+
+                        case 6:
+                            operation.Treat(operation);
                         break;
 
                         default:
