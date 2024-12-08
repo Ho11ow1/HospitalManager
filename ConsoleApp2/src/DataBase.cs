@@ -198,6 +198,27 @@ class DataBase
         return default;
     }
 
+    public bool SetCompleted(Operation operation)
+    {  // Make this work for only the completed treatment not all pending ones
+        using (var connection = new SqliteConnection(ConnectionString))
+        {
+            connection.Open();
+
+            var cmd = connection.CreateCommand();
+            cmd.CommandText = @"
+                UPDATE Operations
+                SET Status = @Status
+                WHERE AccountID = @AccountID";
+
+            cmd.Parameters.AddWithValue("@AccountID", operation.oaccountID);
+            cmd.Parameters.AddWithValue("@Status", (int)Status.Completed);
+
+            cmd.ExecuteNonQuery();
+        }
+
+        return true;
+    }
+
     #endregion
 
     #region Private Methods

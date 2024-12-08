@@ -44,6 +44,11 @@ public static class Validation
         return temp;
     }
 
+    public static bool GetValidBool(string prompt)
+    {
+        return Console.ReadLine()?.Trim()?.ToUpper() == "Y";
+    }
+
     private static bool Validate64(UInt64 input, UInt16 length)
     {
         UInt16 count = 0;

@@ -1,4 +1,5 @@
 using Microsoft.Data.Sqlite;
+using System.ComponentModel;
 
 class Operation
 {
@@ -114,45 +115,150 @@ class Operation
         switch (treatmentType)
         {
             case Treatment.Medication:
-                Medication();
+                Medication(operation);
                 break;
 
             case Treatment.Surgery:
-                Surgery();
+                Surgery(operation);
                 break;
 
             case Treatment.Checkup:
-                Checkup();
+                Checkup(operation);
                 break;
         }
-    }
-
-    public void Medication()
-    {
-        // Apply an effect
-
-
-
-    }
-
-    public void Surgery()
-    {
-        // Possibly kill the user and remove him from the DB
-
-
-
-    }
-
-    public void Checkup()
-    {
-        // Just talk and return or send to Medicate and update DB based on response
-
-
-
     }
 
     #endregion
 
     #region Private Methods
+
+    private void Medication(Operation operation)
+    {
+        Console.WriteLine("WARNING: This simulation contains potentially triggering content related to mental health conditions.");
+        Console.WriteLine("Would you like to proceed with the full simulation? (Y/N)");
+        Console.Write("If you select No, a more gentle version will be shown: ");
+        bool fullSimulation = Validation.GetValidBool("Would you like to proceed with the full simulation? (Y/N)");
+        Console.Clear();
+
+        string[] words = fullSimulation ?
+        new string[]
+        { 
+            "HELP ME", "PLEASE", "I CAN'T CONTROL MY THOUGHTS", "I'M SCARED", "I NEED HELP", "I'M DYING", "I'M GOING CRAZY",
+            "I'M GOING TO KILL MYSELF", "I'M GOING TO KILL YOU", "I'M GOING TO KILL THEM", "I'M GOING TO KILL THEM ALL",  
+            "THEY DESERVE IT", "IT'S ALL THEIR FAULT", "IT'S THEIR FAULT", "I HATE THEM", "I HATE YOU", "I HATE EVERYONE"
+        } :
+        new string[]
+        {
+            "HELP ME", "PLEASE", "I CAN'T CONTROL MY THOUGHTS", "I'M SCARED", "I NEED HELP", "I'M DYING", "I'M GOING CRAZY"
+        };
+
+        string[] thoughts = fullSimulation ?
+        new string[]
+        {
+            "It feels different this time",
+            "It's hard to breathe",
+            "It's hard to think",
+            "I can't stop shaking",
+            "I can't stop crying",
+            "I'm so tired of this",
+            "I want to end it all",
+            "Nothing feels real",
+            "I'm so alone",
+            "I just want to sleep"
+        } :
+        new string[]
+        {
+            "It feels different this time",
+            "It's hard to breathe",
+            "It's hard to think",
+            "I can't stop shaking",
+        };
+
+        Random rand = new Random();
+        int width = Console.WindowWidth;
+        int height = Console.WindowHeight;
+        ConsoleColor[] colors =
+        {
+            ConsoleColor.DarkRed,
+            ConsoleColor.DarkGray,
+            ConsoleColor.Gray,
+            ConsoleColor.White
+        };
+        ConsoleColor standard = ConsoleColor.Gray;
+
+        bool running = true;
+        if (fullSimulation)
+        {
+            Thread background = new Thread(() =>
+            {
+                while (running)
+                {
+                    int x = rand.Next(width - 24); // Account for certain message length
+                    int y = rand.Next(height - 1); // Account for new line characters moving the console height
+                    string word = words[rand.Next(words.Length)];
+                    ConsoleColor color = colors[rand.Next(colors.Length)];
+
+                    Console.SetCursorPosition(x, y);
+                    Console.ForegroundColor = color;
+                    Console.Write(word);
+                    Thread.Sleep(100);
+                }
+            });
+            background.IsBackground = true;
+            background.Start();
+            goto input;
+        }
+
+        input:
+        string message = "Press T to take medication:";
+        Console.SetCursorPosition((width - message.Length) / 2 , height / 2);
+        Console.Write($"{message}");
+        if (Console.ReadKey().Key == ConsoleKey.T)
+        {
+            running = false;
+            Thread.Sleep(150);
+            Console.ForegroundColor = standard;
+
+            Console.Clear();
+            Console.WriteLine("Taking medication...");
+            Console.WriteLine("Remember: Recovery is possible with proper treatment.");
+
+            Thread.Sleep(1500);
+
+            if (DB.SetCompleted(operation))
+            {
+                operation.TimeToTreat = false;
+                Console.WriteLine("Medication taken\n");
+            }
+        }
+        else
+        {
+            Console.WriteLine("Refused medication");
+        }
+    }
+
+    private void Surgery(Operation operation)
+    {
+        // Possibly kill the user and remove him from the DB
+
+
+        if (DB.SetCompleted(operation))
+        {
+            operation.TimeToTreat = false;
+        }
+
+    }
+
+    private void Checkup(Operation operation)
+    {
+        // Just talk and return or send to Medicate and update DB based on response
+
+
+        if (DB.SetCompleted(operation))
+        {
+            operation.TimeToTreat = false;
+        }
+    }
+
     #endregion
 }

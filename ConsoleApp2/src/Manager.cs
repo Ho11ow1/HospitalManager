@@ -77,7 +77,7 @@ class HospitalManager
                     Console.WriteLine("==================");
 
                     Console.Write("Choose option: ");
-                    choice = Convert.ToUInt16(Console.ReadLine());
+                    choice = Convert.ToUInt16(Console.ReadLine()!.Trim() ?? "");
 
                     Console.Clear();
 
